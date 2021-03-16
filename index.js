@@ -1,5 +1,7 @@
 const express = require("express");
 const bodyParser = require('body-parser');
+const categoriesController = require("./categories/CategoriesController");
+const articlesController = require("./articles/ArticlesController");
 const app = express();
 const connection = require("./database/database");
 
@@ -24,6 +26,10 @@ connection
 .catch((error)=>{
     console.log("Ocorreu um erro", error)
 })
+
+
+app.use("/",categoriesController);
+app.use("/",articlesController);
 
 app.get("/",(req, res)=>{
     res.render("index")
