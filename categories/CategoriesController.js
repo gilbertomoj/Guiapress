@@ -22,7 +22,7 @@ router.post("/categories/save",(req , res)=>{
         res.redirect("/admin/categories/new");
     }
 });
-
+//Achando todas as categorias
 router.get("/admin/categories",(req , res )=>{
     Category.findAll().then(categories => {
         res.render("admin/categories/index", { categories});
@@ -83,4 +83,7 @@ router.post("/categories/update",(req , res)=>{
     })
 
 })
+
+
+
 module.exports = router;
