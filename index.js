@@ -35,12 +35,38 @@ app.use("/",categoriesController);
 app.use("/",articlesController);
 
 app.get("/",(req, res)=>{
-    Article.findAll().then(articles =>{
-        res.render("index", {articles})
+    Article.findAll({
+        order: [
+            ['id', 'DESC']
+        ]
+        //Linha para ajustar a ordem na exibição de artigos
+    }).then(articles =>{
+        Category.findAll().then( categories =>{
+            res.render("index", {articles , categories})
+        })
     })
 
 
 });
+//Página de leitura de artigos
+app.get("/:slug",(req , res)=>{
+    var slug = req.params.slug;
+    Article.findOne({
+        where:{
+            slug
+        }
+    }).then(article =>{
+        if (article != undefined) {
+            Category.findAll().then( categories =>{
+                res.render("article", {article , categories})
+            })
+        }else{
+            res.redirect("/")
+        }
+    }).catch(err =>{
+        res.redirect("/");
+    })
+})
 
 app.listen(8080, ()=>{
     console.log("Servidor rodando")
