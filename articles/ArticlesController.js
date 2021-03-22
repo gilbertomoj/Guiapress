@@ -36,6 +36,40 @@ router.post("/articles/save",(req , res )=>{
     })
 })
 
+//Editando artigos
+router.get("/admin/articles/edit/:id",(req, res)=>{
+    var id = req.params.id;
+    if (isNaN(id)) {
+        res.redirect("/admin/articles")
+    }
+    Article.findByPk(id).then(articles =>{
+        Category.findAll().then( categories => {
+            if (articles != undefined) {
+                res.render("admin/articles/edit", {articles , categories})
+            } else {
+                res.redirect("/admin/articles");
+            }
+        })
+        
+    })
+})
+
+router.post("/articles/update", (req , res)=>{
+    var id = req.body.id;
+    var title = req.body.title;
+    var body = req.body.title;
+    var categoryId = req.body.category;
+
+    Article.update({ title , slug : slugify(title), body , categoryId}, {
+        where : 
+        { id }
+    }).then(()=>{
+        res.redirect("/admin/articles");
+    })
+
+})
+
+
 //Delete de artigos
 router.post("/articles/delete",(req, res) => {
     var id = req.body.id;
