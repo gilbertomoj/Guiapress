@@ -4,6 +4,7 @@ const categoriesController = require("./categories/CategoriesController");
 const articlesController = require("./articles/ArticlesController");
 const app = express();
 const connection = require("./database/database");
+
 //Models
 const Article = require("./articles/Article");
 const Category = require("./categories/Category");
@@ -34,7 +35,10 @@ app.use("/",categoriesController);
 app.use("/",articlesController);
 
 app.get("/",(req, res)=>{
-    res.render("index")
+    Article.findAll().then(articles =>{
+        res.render("index", {articles})
+    })
+
 
 });
 
