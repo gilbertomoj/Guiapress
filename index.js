@@ -34,6 +34,7 @@ connection
 app.use("/",categoriesController);
 app.use("/",articlesController);
 
+//Home do aplicativo 
 app.get("/",(req, res)=>{
     Article.findAll({
         order: [
@@ -65,6 +66,26 @@ app.get("/:slug",(req , res)=>{
         }
     }).catch(err =>{
         res.redirect("/");
+    })
+})
+
+app.get("/category/:slug",(req, res)=>{
+    var slug = req.params.slug;
+    Category.findOne({
+        where: {
+            slug
+        },
+        include : [{model: Article}]
+    }).then(category =>{
+        if (category != undefined) {
+            Category.findAll().then( categories =>{
+                res.render("index", {articles : category.articles, categories})//Passando todos os artigos com joins das categorias
+            });
+        } else {
+            res.redirect("/")
+        }
+    }).catch(err =>{
+        res.redirect("/")
     })
 })
 
