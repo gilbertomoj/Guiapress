@@ -5,7 +5,7 @@
     <hr>
     <div class="card">
         <div class="card-header">
-            <h2>Atualizar artigo</h2>
+            <h2>Editar artigo</h2>
         </div>
         <div class="card-body">
             <form method="POST" action="/articles/update">
@@ -16,6 +16,7 @@
                 <textarea class="form-control" name="body" id="article" > <%= articles.body %> </textarea><br>
                 <select name="category" class="form-control">
                     <% categories.forEach((category)=>{%>
+                        <!--Permite que apenas a categoria setada no banco fique selecionada -->
                         <% if( category.id == articles.categoryId) { %>
                         <option value=" <%= category.id %>" selected > <%= category.title %></option>
                         <% }else {%>
@@ -29,6 +30,11 @@
         </div>
     </div>
 </div>
+
+<div id="content" style="display: none;">
+    <%- articles.body %>
+</div>
+
 <!-- Codigo para utilização do tinymce -->
 <script src="/tinymce/tinymce.min.js"></script>
 <script>
@@ -37,7 +43,8 @@
       selector: '#article',
       plugins: [
           'advlist autolink link image lists print preview hr searchreplace wordcount fullscreen insertdatetime insertdatetime media save table paste emoticons'
-      ]
+      ],
+      
     });
 </script>
 <%- include ("../../partials/footer.ejs") %>

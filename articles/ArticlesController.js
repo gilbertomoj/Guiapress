@@ -38,10 +38,8 @@ router.post("/articles/save",(req , res )=>{
 
 //Editando artigos
 router.get("/admin/articles/edit/:id",(req, res)=>{
-    var id = req.params.id;
-    if (isNaN(id)) {
-        res.redirect("/admin/articles")
-    }
+    var id = req.params.id;//Id passado pelo Input no index
+
     Article.findByPk(id).then(articles =>{
         Category.findAll().then( categories => {
             if (articles != undefined) {
@@ -57,7 +55,7 @@ router.get("/admin/articles/edit/:id",(req, res)=>{
 router.post("/articles/update", (req , res)=>{
     var id = req.body.id;
     var title = req.body.title;
-    var body = req.body.title;
+    var body = req.body.body;
     var categoryId = req.body.category;
 
     Article.update({ title , slug : slugify(title), body , categoryId}, {
@@ -65,6 +63,8 @@ router.post("/articles/update", (req , res)=>{
         { id }
     }).then(()=>{
         res.redirect("/admin/articles");
+    }).catch(err =>{
+        res.redirect("/")
     })
 
 })
@@ -92,5 +92,38 @@ router.post("/articles/delete",(req, res) => {
         res.redirect("/admin/articles");
     }
 });
+
+//Paginação de Artigos
+router.get("/articles/page/:num",(req , res)=>{
+    var page = req.params.num;
+    var offset = 0;
+
+    if (isNaN(page) || page == 1) {
+        offset = 0;
+    } else {
+        offset = parseInt(page) * 4;
+    }
+
+    Article.findAndCountAll({
+        limit: 4,
+        //Define o limite de artigos(objetos) por pagina
+        offset: offset
+    }).then( articles =>{
+        var next;
+        if (offset + 4 >= articles.count) {
+            next = false;
+        } else{
+            next = true
+        }
+
+        var result = {
+            next,
+            articles
+            
+        }
+        res.json(result)
+    })
+
+})
 
 module.exports = router;
