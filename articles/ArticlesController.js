@@ -101,13 +101,22 @@ router.get("/articles/page/:num",(req , res)=>{
     if (isNaN(page) || page == 1) {
         offset = 0;
     } else {
-        offset = parseInt(page) * 4;
+        if (page == 2) {
+            offset = parseInt(page) * 2;
+        } else {
+            offset = parseInt(page) * 4;
+        }
+        
     }
+    
 
     Article.findAndCountAll({
         limit: 4,
         //Define o limite de artigos(objetos) por pagina
-        offset: offset
+        offset: offset,
+        order: [
+            ['id', 'DESC']
+        ]
     }).then( articles =>{
         var next;
         if (offset + 4 >= articles.count) {
@@ -117,11 +126,17 @@ router.get("/articles/page/:num",(req , res)=>{
         }
 
         var result = {
+            page: parseInt(page),
             next,
             articles
             
         }
-        res.json(result)
+
+        Category.findAll().then(categories =>{
+            res.render("admin/articles/page", {result , categories})
+        })
+
+
     })
 
 })
