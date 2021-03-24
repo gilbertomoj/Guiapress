@@ -1,6 +1,6 @@
-# DoQuestions
- Projeto #01 feito na formação NodeJS 
- Plataforma de perguntas e respostas baseado nos sites ASKfm e Yahoo 
+# GuiaPress
+ Projeto #02 feito na formação NodeJS 
+ Blog para a postagem e leitura de artigos 
 
 
 ## :hammer_and_wrench: Tecnologias 
@@ -9,6 +9,7 @@
 - [Node.js](https://nodejs.org/en/)
 - [EJS](https://ejs.co/)
 - [MySQL](https://www.mysql.com/)
+- [TinyMCE](https://www.tiny.cloud/)
 
 ## :jigsaw: Requisitos
 - NodeJS instalado em maquina 
