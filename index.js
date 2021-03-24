@@ -1,11 +1,14 @@
 const express = require("express");
 const bodyParser = require('body-parser');
+const session = require("express-session");
+const app = express();
+const connection = require("./database/database");
+
+//Controllers
 const categoriesController = require("./categories/CategoriesController");
 const articlesController = require("./articles/ArticlesController");
 const usersController = require("./user/UsersController");
 
-const app = express();
-const connection = require("./database/database");
 
 //Models
 const Article = require("./articles/Article");
@@ -13,6 +16,15 @@ const Category = require("./categories/Category");
 const User = require("./user/User");
 //View engine
 app.set("view engine","ejs")
+
+// Sessions
+
+
+
+app.use(session({
+    secret: "algo", cookie:{ maxAge: 30000}
+}))
+
 
 //Static
 app.use(express.static("public"))

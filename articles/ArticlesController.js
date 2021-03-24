@@ -3,10 +3,10 @@ const router = express.Router();
 const Category = require('../categories/Category');
 const Article = require('./Article');
 const slugify = require('slugify');
-
+const adminAuth = require("../middlewares/adminAuth");
 
 //Achando todos os artigos
-router.get('/admin/articles', (req, res) => {
+router.get('/admin/articles', adminAuth, (req, res) => {
     Article.findAll({
       include: [{ model: Category  }],//Include para permitir que a pagina acesse a tabela de categorias
     }).then((articles) => {
@@ -15,7 +15,7 @@ router.get('/admin/articles', (req, res) => {
   });
 
 //Criação de Artigos
-router.get("/admin/articles/new",(req , res)=>{
+router.get("/admin/articles/new",adminAuth ,(req , res)=>{
     Category.findAll().then(categories =>{
         res.render("admin/articles/new" , {categories})
     })
@@ -37,7 +37,7 @@ router.post("/articles/save",(req , res )=>{
 })
 
 //Editando artigos
-router.get("/admin/articles/edit/:id",(req, res)=>{
+router.get("/admin/articles/edit/:id", adminAuth,(req, res)=>{
     var id = req.params.id;//Id passado pelo Input no index
 
     Article.findByPk(id).then(articles =>{
@@ -52,7 +52,7 @@ router.get("/admin/articles/edit/:id",(req, res)=>{
     })
 })
 
-router.post("/articles/update", (req , res)=>{
+router.post("/articles/update",adminAuth, (req , res)=>{
     var id = req.body.id;
     var title = req.body.title;
     var body = req.body.body;
@@ -71,7 +71,7 @@ router.post("/articles/update", (req , res)=>{
 
 
 //Delete de artigos
-router.post("/articles/delete",(req, res) => {
+router.post("/articles/delete",adminAuth,(req, res) => {
     var id = req.body.id;
     if(id != undefined){
         if(!isNaN(id)){
